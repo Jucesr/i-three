@@ -20,8 +20,5 @@ if (process.env.NODE_ENV !== 'development') {
     plugins: ['transform-decorators-legacy'],
     presets: ['es2015-node5', 'stage-0']
   })
-
   require('../src/server')
 }
-
-

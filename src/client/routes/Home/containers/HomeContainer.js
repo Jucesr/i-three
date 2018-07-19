@@ -6,9 +6,12 @@ const mapDispatchToProps = {
 
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state) => {
 
-})
+  return {
+    models: state.home.models
+  }
+}
 
 export default connect(
   mapStateToProps,

@@ -100,4 +100,3 @@ export default class UploadSvc extends BaseSvc {
     })
   }
 }
-

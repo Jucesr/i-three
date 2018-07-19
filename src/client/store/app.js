@@ -89,7 +89,8 @@ const createInitialState = () => {
       links:{
         about: true,
         login: true,
-        home: true
+        home: true,
+        estimate: true
       }
     },
     viewerEnv: null,

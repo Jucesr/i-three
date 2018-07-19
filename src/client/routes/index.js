@@ -2,6 +2,7 @@
 import CoreLayout from '../layouts/CoreLayout'
 import ViewerRoute from './Viewer'
 import HomeRoute from './Home'
+import EstimateRoute from './Estimate'
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
@@ -11,7 +12,8 @@ export const createRoutes = (store) => ({
   component   : CoreLayout,
   indexRoute  : HomeRoute(store),
   childRoutes : [
-    ViewerRoute(store)
+    ViewerRoute(store),
+    EstimateRoute(store)
   ]
 })
 

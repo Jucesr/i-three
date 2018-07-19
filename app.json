@@ -1,6 +1,6 @@
 {
-  "name": "forge-react-boiler",
-  "description": "Forge React Boiler",
+  "name": "i-three",
+  "description": "React + Forge",
   "repository": "https://github.com/Autodesk-Forge/forge-react-boiler.nodejs",
   "logo": "https://github.com/Autodesk-Forge/forge-react-boiler.nodejs/resources/img/forge.png",
   "keywords": ["autodesk", "forge", "node", "express"],

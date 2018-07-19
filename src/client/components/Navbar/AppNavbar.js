@@ -108,6 +108,26 @@ export default class AppNavbar extends React.Component {
             </Nav>
           }
 
+          {
+            appState.navbar.links.estimate &&
+
+            <Nav>
+              <LinkContainer to={{
+                pathname: '/estimate',
+                query: {
+                  path: 'resources/models/arca/3D View/arca/arca.svf',
+                  extIds: 'Viewing.Extension.Event' 
+                }
+              }}>
+                <NavItem eventKey="estimate">
+                  <label className="nav-label">
+                    &nbsp; Estimate
+                  </label>
+                </NavItem>
+              </LinkContainer>
+            </Nav>
+          }
+
           <Nav pullRight>
 
             {
