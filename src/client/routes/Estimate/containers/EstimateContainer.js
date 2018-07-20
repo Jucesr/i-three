@@ -1,15 +1,24 @@
 import { connect } from 'react-redux'
 
 import {setViewerEnv} from '../../../store/app'
+import {
+  onDbItemSelected,
+  updateQuantityOfItem,
+  saveExpanded
+} from '../modules/estimate'
 
 import EstimateView from '../components/EstimateView'
 
+
 const mapDispatchToProps = {
-  setViewerEnv
+  setViewerEnv,
+  onDbItemSelected,
+  updateQuantityOfItem,
+  saveExpanded
 }
 
 const mapStateToProps = (state) => ({
-  ...state.viewer,
+  ...state.estimate,
   appState: state.app
 })
 

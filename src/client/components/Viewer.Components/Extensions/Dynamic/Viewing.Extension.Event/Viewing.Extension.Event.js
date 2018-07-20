@@ -42,7 +42,7 @@ export default class EventExtension extends Autodesk.Viewing.Extension {
     //     console.log(elements);//this includes all properties of a node.
     //   })
     // var items = [];
-    this.viewer.model.getBulkProperties(currSelection, null, function (elements){
+    this.viewer.model.getBulkProperties(currSelection, null, (elements) => {
       var items = elements.map( i => ({
         id: i.dbId,
         name: i.name,
@@ -54,8 +54,7 @@ export default class EventExtension extends Autodesk.Viewing.Extension {
         }
 
       }))
-      console.log(items)
-      console.log(elements);
+      this.options.onDbItemSelected(items[0])
     })
   }
 
@@ -68,8 +67,6 @@ export default class EventExtension extends Autodesk.Viewing.Extension {
   onModelLoaded(event){
     console.log('Model has been loaded')
     console.log(this.options);
-    // this.options.testfunction()
-    console.log(event)
   }
 
 

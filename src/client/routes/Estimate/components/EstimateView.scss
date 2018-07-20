@@ -3,4 +3,17 @@
   background-color: #dadada;
   position: relative;
   width: 100vw;
+  display: flex;
+}
+
+.estimate-table{
+  background-color: white;
+}
+
+.test-hover{
+  &:hover{
+    background: rgb(3,155,229) !important;
+    cursor: pointer;
+  }
+
 }
