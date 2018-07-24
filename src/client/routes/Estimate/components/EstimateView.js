@@ -404,10 +404,10 @@ class EstimateView extends React.Component {
 
             />
           </div>
-          {/* <Viewer onViewerCreated={(viewer => {
+          <Viewer onViewerCreated={(viewer => {
               this.onViewerCreated(viewer)
             })}
-          /> */}
+          />
         </div>
       )
    }
