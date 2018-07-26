@@ -4,7 +4,9 @@ import {setViewerEnv} from '../../../store/app'
 import {
   onDbItemSelected,
   updateQuantityOfItem,
-  saveExpanded
+  saveExpanded,
+  addLineItem,
+  deleteLineItem
 } from '../modules/estimate'
 
 import EstimateView from '../components/EstimateView'
@@ -14,7 +16,9 @@ const mapDispatchToProps = {
   setViewerEnv,
   onDbItemSelected,
   updateQuantityOfItem,
-  saveExpanded
+  saveExpanded,
+  addLineItem,
+  deleteLineItem
 }
 
 const mapStateToProps = (state) => ({

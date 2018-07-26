@@ -5,12 +5,13 @@ export const ON_DB_ITEM_SELECTED = 'ON_DB_ITEM_SELECTED'
 export const UPDATE_QUANTITY_OF_ITEM_SELECTED = 'UPDATE_QUANTITY_OF_ITEM_SELECTED'
 export const LOAD_DB_ITEMS = 'LOAD_DB_ITEMS'
 export const SAVE_EXPANDED = 'SAVE_EXPANDED'
+export const ADD_LINE_ITEM = 'ADD_LINE_ITEM'
+export const DELETE_LINE_ITEM = 'DELETE_LINE_ITEM'
 
 // ------------------------------------
 // Actions
 // ------------------------------------
 export const loadDbItems = (dbItems) => {
-
   return {
     type    : LOAD_DB_ITEMS,
     payload : dbItems
@@ -18,7 +19,6 @@ export const loadDbItems = (dbItems) => {
 }
 
 export const onDbItemSelected = (dbItem) => {
-
   return {
     type    : ON_DB_ITEM_SELECTED,
     payload : dbItem
@@ -26,27 +26,34 @@ export const onDbItemSelected = (dbItem) => {
 }
 
 export const updateQuantityOfItem = (item) => {
-
   return {
     type    : UPDATE_QUANTITY_OF_ITEM_SELECTED,
     payload : item
   }
 }
 
-
-export const saveExpanded = (expanded) => {
-
-  return {
+export const saveExpanded = (expanded) => ({
     type    : SAVE_EXPANDED,
     payload : expanded
-  }
-}
+})
+
+export const addLineItem = (item) => ({
+    type    : ADD_LINE_ITEM,
+    payload : item
+})
+
+export const deleteLineItem = (rn) => ({
+    type    : DELETE_LINE_ITEM,
+    payload : rn
+})
 
 export const actions = {
   onDbItemSelected,
   loadDbItems,
   updateQuantityOfItem,
-  saveExpanded
+  saveExpanded,
+  addLineItem,
+  deleteLineItem
 }
 
 // ------------------------------------
@@ -90,6 +97,20 @@ const ACTION_HANDLERS = {
     return {
       ...state,
       expanded: action.payload
+    }
+  },
+
+  [ADD_LINE_ITEM] : (state, action) => {
+    return {
+      ...state,
+      estimate_data: state.estimate_data.concat(action.payload)
+    }
+  },
+
+  [DELETE_LINE_ITEM] : (state, action) => {
+    return {
+      ...state,
+      estimate_data: state.estimate_data.filter(item => item.rn != action.payload)
     }
   }
 }

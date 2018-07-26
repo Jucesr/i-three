@@ -1,17 +1,10 @@
 // import Viewer from '../../../components/Viewer.Components/Viewer'
-import Viewer from 'Viewer'
-import QuantityInput from './QuantityInput'
-import './EstimateView.scss'
 import React from 'react'
-import ReactTable from "react-table";
-import "react-table/react-table.css";
 
-Number.prototype.format = function(n, x, s, c) {
-    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
-        num = this.toFixed(Math.max(0, ~~n));
+import Viewer from 'Viewer'
+import EstimateTable from './EstimateTable'
 
-    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
-};
+import './EstimateView.scss'
 
 class EstimateView extends React.Component {
 
@@ -20,12 +13,7 @@ class EstimateView extends React.Component {
    //
    /////////////////////////////////////////////////////////
    constructor (props) {
-
       super (props)
-
-      this.state = {
-        expanded: this.props.expanded
-      }
    }
 
    /////////////////////////////////////////////////////////
@@ -177,237 +165,24 @@ class EstimateView extends React.Component {
    //
    /////////////////////////////////////////////////////////
 
-   formatIndividualColumn(format){
-      switch (format) {
-        case 'currency':
-          return row => {
-              return !isNaN(row.value) ? (
-                `$${parseFloat(row.value).format(2,3,',','.')}`
-              ) : row.value
-            }
-        break;
-
-        case 'number':
-          return row => {
-              return !isNaN(row.value) ? (
-                `${parseFloat(row.value).format(2,3,',','.')}`
-              ) : row.value
-            }
-        break;
-
-        case 'text': {
-          return row => row.value
-        }
-        default:
-
-      }
-    }
-
-   renderEditable(cellInfo) {
-    if(!cellInfo.subRows){
-      return (
-        // <div
-        //   // style={{ backgroundColor: "#fafafa" }}
-        //   contentEditable
-        //   suppressContentEditableWarning
-        //   onBlur={e => {
-        //     let rn = cellInfo.original.rn
-        //     let quantity = e.target.innerHTML
-        //     if(quantity.length > 0 && !isNaN(quantity))
-        //       this.props.updateQuantityOfItem({rn,quantity})
-        //     else{
-        //       this.props.updateQuantityOfItem({
-        //         rn,
-        //         quantity: cellInfo.original.quantity
-        //       })
-        //     }
-        //     // const data = [...this.state.data];
-        //     // data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-        //     // this.setState({ data });
-        //   }}
-        //   dangerouslySetInnerHTML={{
-        //     __html:  `${parseFloat(cellInfo.original.quantity).format(2,3,',','.')}`
-        //   }}
-        // />
-        // <input
-        //   type='text'
-        //   defaultValue={cellInfo.original.quantity}
-        //   onChange={e => {
-        //     if (e.target.value.match(/^\d*(\.\d{0,2})?$/)) {
-        //       this.setState(() => ({ amount }));
-        //     }
-        //   }}
-        //   onBlur={e => {
-        //     let rn = cellInfo.original.rn
-        //     let quantity = e.target.value
-        //     if(quantity.length > 0 && !isNaN(quantity))
-        //       this.props.updateQuantityOfItem({rn,quantity})
-        //     else{
-        //       this.props.updateQuantityOfItem({
-        //         rn,
-        //         quantity: cellInfo.original.quantity
-        //       })
-        //     }
-        //   }}
-        // />
-        <QuantityInput
-          quantityValue={cellInfo.original.quantity}
-          onBlur={(quantity) => {
-            let rn = cellInfo.original.rn
-            this.props.updateQuantityOfItem({rn,quantity})
-          }}
-        />
-
-      );
-    }
-
-  }
-
-   getTrProps(state, rowInfo, column){
-    let events = {}
-
-    if(rowInfo ){
-      let lv01 = 'rgb(205,205,205)'
-      let lv02 = 'rgb(225,225,225)'
-      let lineItem = 'rgb(245,245,245)'
-      let color
-      switch (rowInfo.row._pivotID) {
-        case "lv01":
-          color = lv01
-        break;
-        case "lv02":
-          color = lv02
-        break;
-        default:
-          color = lineItem
-          events = {
-            className: 'test-hover',
-            // onClick: (e, handleOriginal) => {
-            //     let rn = rowInfo.row.rn;
-            //     let quantity = this.props.selectedDbItem.properties.Volume
-            //     this.props.updateQuantityOfItem({rn,quantity})
-            //   if (handleOriginal) {
-            //     handleOriginal();
-            //   }
-            // }
-          }
-        break;
-
-
-      }
-      events = {
-        ...events,
-        style: {
-            background: color
-        }
-      }
-    }
-
-    return events
-  }
-
    render () {
 
 
       return (
         <div className="viewer-view">
-          <div className="estimate-table">
-            <ReactTable
-              data={this.props.estimate_data}
-              pivotBy={['lv01', 'lv02']}
-              columns={[
-                {
-                  Header: '',
-                  accessor: 'lv01',
-                  width: 30,
-                  resizable: false,
-                  PivotValue: () => (<div></div>),
-                  pivot: true
-                },{
-                  Header: '',
-                  accessor: 'lv02',
-                  width: 30,
-                  resizable: false,
-                  Aggregated: row => false,
-                  PivotValue: () => (<div></div>)
-                },{
-                  Header: 'RN',
-                  accessor: 'rn',
-                  Aggregated: row => {
-                    let arrayOfLevels = ['lv01', 'lv02']
-                    let level = arrayOfLevels.filter(lv => row.row[lv])[0]
-                    let rn;
-                    switch (level) {
-                      case "lv01":
-                        rn = row.subRows[0]._subRows[0]._original.lv01
-                      break;
-                      case "lv02":
-                        rn = row.subRows[0]._original.lv02 ?
-                          `${row.subRows[0]._original.lv01}.${row.subRows[0]._original.lv02}`
-                          :
-                          ''
-                      break;
-
-                    }
-                    return (
-                      <span>
-                        {rn}
-                      </span>
-                    );
-                  }
-                },{
-                  Header: 'Description',
-                  accessor: 'description',
-                  Aggregated: row => {
-                    let arrayOfLevels = ['lv01', 'lv02']
-                    let level = arrayOfLevels.filter(lv => row.row[lv])[0]
-                    let description;
-                    switch (level) {
-                      case "lv01":
-                        description = row.subRows[0]._subRows[0]._original.lv01_description
-                      break;
-                      case "lv02":
-                        description = row.subRows[0]._original.lv02_description
-                      break;
-
-                    }
-                    return (
-                      <span>
-                        {description}
-                      </span>
-                    );
-                  }
-                },{
-                  Header: 'Unit price',
-                  accessor: 'pu',
-                  Aggregated: row => false,
-                  Cell: this.formatIndividualColumn('currency')
-                },{
-                  Header: 'Quantity',
-                  accessor: 'quantity',
-                  Aggregated: row => false,
-                  Cell: this.renderEditable.bind(this)
-                },{
-                  Header: 'Total',
-                  accessor: 'total',
-                  aggregate: vals => _.sum(vals),
-                  Cell: this.formatIndividualColumn('currency')
-                }
-              ]}
-              className="-striped -highlight"
-              getTrProps={this.getTrProps.bind(this)}
-              onExpandedChange={expanded => {
-                this.props.saveExpanded(expanded)
-                this.setState({ expanded })
-              }}
-              expanded={this.state.expanded}
-
-            />
-          </div>
-          <Viewer onViewerCreated={(viewer => {
+          <EstimateTable
+            estimate_data={this.props.estimate_data}
+            expanded={this.props.expanded}
+            deleteLineItem={this.props.deleteLineItem}
+            addLineItem={this.props.addLineItem}
+            selectedDbItem={this.props.selectedDbItem}
+            saveExpanded={this.props.saveExpanded}
+            updateQuantityOfItem={this.props.updateQuantityOfItem}
+          />
+          {/* <Viewer onViewerCreated={(viewer => {
               this.onViewerCreated(viewer)
             })}
-          />
+          /> */}
         </div>
       )
    }
