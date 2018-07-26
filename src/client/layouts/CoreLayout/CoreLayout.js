@@ -4,6 +4,7 @@ import Header from 'Header'
 // import 'forge-white.scss'
 import 'core.scss'
 import React from 'react'
+import PropTypes from 'prop-types'
 
 
 class CoreLayout extends React.Component {
@@ -13,7 +14,7 @@ class CoreLayout extends React.Component {
   //
   /////////////////////////////////////////////////////////
   static propTypes = {
-    children : React.PropTypes.element.isRequired
+    children : PropTypes.element.isRequired
   }
 
   /////////////////////////////////////////////////////////

@@ -1,6 +1,7 @@
 
 import { LinkContainer } from 'react-router-bootstrap'
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import AboutDlg from 'Dialogs/AboutDlg'
 import ServiceManager from 'SvcManager'
 import './AppNavbar.scss'
@@ -116,7 +117,7 @@ export default class AppNavbar extends React.Component {
                 pathname: '/estimate',
                 query: {
                   path: 'resources/models/arca/3D View/arca/arca.svf',
-                  extIds: 'Viewing.Extension.Event' 
+                  extIds: 'Viewing.Extension.Event'
                 }
               }}>
                 <NavItem eventKey="estimate">

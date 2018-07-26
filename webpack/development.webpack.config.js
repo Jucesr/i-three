@@ -150,12 +150,11 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: [{
-            loader:'react-hot-loader'
-          }, {
             loader: 'babel-loader',
             options: {
               presets: ['react', 'env', 'stage-0'],
               plugins: [
+                'react-hot-loader/babel',
                 'transform-decorators-legacy',
                 'transform-runtime'
               ]

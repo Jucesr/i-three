@@ -3,6 +3,7 @@ import QuantityInput from './QuantityInput'
 import RowActionsModal from './RowActionsModal'
 import ReactTable from "react-table"
 import ReactModal from 'react-modal';
+// import { Form, Text } from 'informed'
 import "react-table/react-table.css"
 
 Number.prototype.format = function(n, x, s, c) {
