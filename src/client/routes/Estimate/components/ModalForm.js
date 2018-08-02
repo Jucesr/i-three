@@ -2,7 +2,7 @@ import React from 'react'
 import { Form, Text, TextArea, asField} from 'informed'
 import Cleave from 'cleave.js/dist/cleave-react';
 
-import {replaceAll, capitalizeFirstLetter} from '../../../utils'
+import {replaceAll} from '../../../utils'
 import './ModalForm.css'
 
 export default class ModalForm extends React.Component {
@@ -107,7 +107,7 @@ const CustomInput = asField(({ fieldState, fieldApi,  ...props }) => {
 
   return (
     <div className="Modal_form_section">
-      <div className="Modal_form_field_label" htmlFor={field}>{replaceAll(capitalizeFirstLetter(field), '_', ' ')}</div>
+      <div className="Modal_form_field_label" htmlFor={field}>{replaceAll(_.capitalize(field), '_', ' ')}</div>
       <Cleave
         {...rest}
         value={value}

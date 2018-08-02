@@ -1,10 +1,29 @@
-.viewer-view {
+.estimate_page{
+  display: flex;
+}
+
+.estimate_subpage_table{
+  overflow-y: scroll;
+  // overflow-x: visible;
+  height: calc(100vh - 65px);
+  width: 100%;
+}
+
+.estimate_subpage_viewer {
   height: calc(100vh - 65px);
   background-color: #dadada;
   position: relative;
   width: 100vw;
-  display: flex;
 }
+
+.estimate_subpage_toolbar{
+  background-color: #3f6183
+}
+
+.toolbar_toggle{
+
+}
+
 
 .estimate-table{
   background-color: white;

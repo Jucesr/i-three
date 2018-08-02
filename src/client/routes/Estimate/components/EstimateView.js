@@ -14,6 +14,10 @@ class EstimateView extends React.Component {
    /////////////////////////////////////////////////////////
    constructor (props) {
       super (props)
+
+      this.state = {
+        show_model: false
+      }
    }
 
    /////////////////////////////////////////////////////////
@@ -169,20 +173,38 @@ class EstimateView extends React.Component {
 
 
       return (
-        <div className="viewer-view">
-          <EstimateTable
-            estimate_data={this.props.estimate_data}
-            expanded={this.props.expanded}
-            deleteLineItem={this.props.deleteLineItem}
-            addLineItem={this.props.addLineItem}
-            selectedDbItem={this.props.selectedDbItem}
-            saveExpanded={this.props.saveExpanded}
-            updateQuantityOfItem={this.props.updateQuantityOfItem}
-          />
-          {/* <Viewer onViewerCreated={(viewer => {
-              this.onViewerCreated(viewer)
-            })}
-          /> */}
+        <div className="estimate_page">
+          <div className="estimate_subpage_toolbar">
+            <button
+              className="toolbar_toggle"
+              onClick={e => {
+                this.setState((prevState) => ({
+                  show_model: !prevState.show_model
+                }))
+              }}
+            >
+              {this.state.show_model ? 'Hide': 'Show'}
+            </button>
+          </div>
+          <div className="estimate_subpage_table">
+            <EstimateTable
+              estimate_data={this.props.estimate_data}
+              expanded={this.props.expanded}
+              deleteLineItem={this.props.deleteLineItem}
+              addLineItem={this.props.addLineItem}
+              saveLineItem={this.props.saveLineItem}
+              selectedDbItem={this.props.selectedDbItem}
+              saveExpanded={this.props.saveExpanded}
+              updateQuantityOfItem={this.props.updateQuantityOfItem}
+            />
+          </div>
+          {this.state.show_model && <div className="estimate_subpage_viewer">
+            <Viewer onViewerCreated={(viewer => {
+                this.onViewerCreated(viewer)
+              })}
+            />
+          </div>}
+
         </div>
       )
    }

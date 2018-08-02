@@ -22,7 +22,8 @@ class RowActionsModal extends React.Component {
             position: 'absolute',
             background: 'rgb(255, 255, 255)',
             border: 'solid 1px rgb(180, 180, 180)',
-            outline: 'none'
+            outline: 'none',
+            zIndex: '5'
           }}
           onBlur={(e) => {
             props.makeInvisible()

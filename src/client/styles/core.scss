@@ -31,6 +31,8 @@
   font-style: normal;
 }
 
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Roboto');
+
 /////////////////////////////////////////////////////////
 // Some best-practice CSS that's useful for most apps
 //
@@ -47,13 +49,17 @@ html {
 
 html,
 body {
-  font-family: "ArtifaktElementRegular", Helvetica, Arial, sans-serif;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
   overflow: -moz-scrollbars-none;
   -ms-overflow-style: none;
   user-select: none;
   height: 100%;
   padding: 0;
   margin: 0;
+}
+
+button {
+  border: none;
 }
 
 *,

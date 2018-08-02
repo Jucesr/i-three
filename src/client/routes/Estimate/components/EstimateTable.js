@@ -1,9 +1,11 @@
 import React from 'react'
-import QuantityInput from './QuantityInput'
-import RowActionsModal from './RowActionsModal'
 import ReactTable from "react-table"
 import ReactModal from 'react-modal';
-// import { Form, Text } from 'informed'
+
+import ModalForm from './ModalForm'
+import QuantityInput from './QuantityInput'
+import RowActionsModal from './RowActionsModal'
+
 import "react-table/react-table.css"
 
 Number.prototype.format = function(n, x, s, c) {
@@ -17,7 +19,7 @@ class EstimateTable extends React.Component {
 
   constructor(props){
     super(props);
-    this.header_height = 65
+    this.header_height = 0
     this.state = {
       expanded: this.props.expanded,
       row_actions_modal: {
@@ -26,12 +28,23 @@ class EstimateTable extends React.Component {
         y: 0,
         actions: []
       },
-      showEditForm: false
+      line_item: null,
+      showEditForm: false,
+      onSubmitModal: null
     }
     this.actions = {
       add_item: (row) => this.generateAction('Add line item', () => {
-        console.log('It will add a new row')
-        console.log(row)
+        let {reference_number} = row
+        let levels = reference_number.split('.')
+        let pos = levels.length - 1;
+        levels[pos] = (parseInt(levels[pos]) + 1).toString().padStart(2,'0')
+        reference_number = levels.join('.')
+
+        this.setState((prevState) => ({
+          showEditForm: true,
+          onSubmitModal: this.onAddItem,
+          line_item: {reference_number}
+        }))
       }),
       add_header: (row) => this.generateAction('Add header', () => {
         console.log('It will add a header')
@@ -42,19 +55,25 @@ class EstimateTable extends React.Component {
         console.log(row)
       }),
       delete_item: row => this.generateAction('Delete item', () => {
-        this.props.deleteLineItem(row.rn)
+        this.props.deleteLineItem(row._id)
       }),
       edit_item: row => this.generateAction('Edit item', () => {
         this.setState((prevState) => ({
-          showEditForm: true
+          showEditForm: true,
+          onSubmitModal: this.onSaveItem,
+          line_item: row
         }))
       }),
-      quantify_item: row => this.generateAction('Quantify item', () => {
-        let rn = row.rn;
+      quantity_takeoff: row => this.generateAction('Quantity take off', () => {
+        let rn = row.reference_number;
         let quantity = this.props.selectedDbItem.properties.Volume
         this.props.updateQuantityOfItem({rn,quantity})
       })
     }
+
+    //Binding
+
+    this.handleCloseModal = this.handleCloseModal.bind(this)
 
   }
 
@@ -93,26 +112,17 @@ class EstimateTable extends React.Component {
        case 'text': {
          return row => row.value
        }
+       break;
        default:
 
      }
    }
 
-  // renderEditable(cellInfo) {
-  //  if(!cellInfo.subRows){
-  //    return (
-  //        <QuantityInput
-  //          quantityValue={cellInfo.original.quantity}
-  //          onBlur={(quantity) => {
-  //            let rn = cellInfo.original.rn
-  //            this.props.updateQuantityOfItem({rn,quantity})
-  //          }}
-  //        />
-  //
-  //      );
-  //    }
-  //
-  //  }
+  handleCloseModal() {
+    this.setState( () => ({
+      showEditForm: false
+    }) );
+  }
 
   onContextMenu(actions){
     return (e, handleOriginal) => {
@@ -138,17 +148,17 @@ class EstimateTable extends React.Component {
   getTrProps(state, rowInfo, column){
    let events = {}
 
-   let {add_item, add_header, add_sub_header, delete_item, edit_item, quantify_item} = this.actions
+   let {add_item, add_header, add_sub_header, delete_item, edit_item, quantity_takeoff} = this.actions
    if(rowInfo ){
      let row
      let color
      let actions = []
      let className
      switch (rowInfo.row._pivotID) {
-       case "lv01":
+       case "level_1":
          color = 'rgb(205,205,205)'
        break;
-       case "lv02":
+       case "level_2":
          row = rowInfo.row._subRows[rowInfo.row._subRows.length - 1]
          color = 'rgb(225,225,225)'
          actions = [
@@ -158,11 +168,18 @@ class EstimateTable extends React.Component {
        default:
          //Line items
          row = rowInfo.original
+         let path = rowInfo.nestingPath
+         let parent_row = state.resolvedData[path.shift()]
+         for (var i = 0; i < path.length - 1; i++) {
+           parent_row = parent_row._subRows[path[i]]
+         }
+         let last_row = parent_row._subRows[parent_row._subRows.length - 1]._original
+
          color = 'rgb(245,245,245)'
          className = 'test-hover'
          actions = [
-           [add_item(row)],
-           [edit_item(row), delete_item(row) , quantify_item(row)]
+           [add_item(last_row)],
+           [edit_item(row), delete_item(row) , quantity_takeoff(row)]
          ]
 
        break;
@@ -180,42 +197,68 @@ class EstimateTable extends React.Component {
    return events
    }
 
+  //Handlers
+
+  onSaveItem = (values) =>{
+    let levels = values.reference_number.split('.')
+    levels.map( (lv, i) => {
+      values[`level_${i+1}`] = lv
+    })
+
+    this.props.saveLineItem(values)
+    this.handleCloseModal()
+  }
+
+  onAddItem = (values) =>{
+    let levels = values.reference_number.split('.')
+    levels = _.reverse(_.tail(_.reverse(levels))) //Remove last element of array
+    levels.map( (lv, i) => {
+      values[`level_${i+1}`] = lv
+    })
+    console.log(values);
+
+    this.props.addLineItem(values)
+    this.handleCloseModal()
+  }
+
   render(){
 
     return (
-      <div className="estimate-table">
+      <React.Fragment>
         <ReactTable
           data={this.props.estimate_data}
-          pivotBy={['lv01', 'lv02']}
+          pivotBy={['level_1', 'level_2']}
+          showPagination={false}
+          defaultPageSize={this.props.estimate_data.length}
           columns={[
             {
               Header: '',
-              accessor: 'lv01',
+              accessor: 'level_1',
               width: 30,
               resizable: false,
               PivotValue: () => (<div></div>),
               pivot: true
             },{
               Header: '',
-              accessor: 'lv02',
+              accessor: 'level_2',
               width: 30,
               resizable: false,
               Aggregated: row => false,
               PivotValue: () => (<div></div>)
             },{
               Header: 'RN',
-              accessor: 'rn',
+              accessor: 'reference_number',
               Aggregated: row => {
-                let arrayOfLevels = ['lv01', 'lv02']
+                let arrayOfLevels = ['level_1', 'level_2']
                 let level = arrayOfLevels.filter(lv => row.row[lv])[0]
                 let rn;
                 switch (level) {
-                  case "lv01":
-                    rn = row.subRows[0]._subRows[0]._original.lv01
+                  case "level_1":
+                    rn = row.subRows[0]._subRows[0]._original.level_1
                   break;
-                  case "lv02":
-                    rn = row.subRows[0]._original.lv02 ?
-                      `${row.subRows[0]._original.lv01}.${row.subRows[0]._original.lv02}`
+                  case "level_2":
+                    rn = row.subRows[0]._original.level_2 ?
+                      `${row.subRows[0]._original.level_1}.${row.subRows[0]._original.level_2}`
                       :
                       ''
                   break;
@@ -231,15 +274,15 @@ class EstimateTable extends React.Component {
               Header: 'Description',
               accessor: 'description',
               Aggregated: row => {
-                let arrayOfLevels = ['lv01', 'lv02']
+                let arrayOfLevels = ['level_1', 'level_2']
                 let level = arrayOfLevels.filter(lv => row.row[lv])[0]
                 let description;
                 switch (level) {
-                  case "lv01":
-                    description = row.subRows[0]._subRows[0]._original.lv01_description
+                  case "level_1":
+                    description = row.subRows[0]._subRows[0]._original.level_1_description
                   break;
-                  case "lv02":
-                    description = row.subRows[0]._original.lv02_description
+                  case "level_2":
+                    description = row.subRows[0]._original.level_2_description
                   break;
 
                 }
@@ -251,14 +294,13 @@ class EstimateTable extends React.Component {
               }
             },{
               Header: 'Unit price',
-              accessor: 'pu',
+              accessor: 'unit_price',
               Aggregated: row => false,
               Cell: this.formatIndividualColumn('currency')
             },{
               Header: 'Quantity',
               accessor: 'quantity',
               Aggregated: row => false
-              // Cell: this.renderEditable.bind(this)
             },{
               Header: 'Total',
               accessor: 'total',
@@ -292,14 +334,21 @@ class EstimateTable extends React.Component {
         }
 
         <ReactModal
-           isOpen={this.state.showEditForm}
-           contentLabel="Minimal Modal Example"
+          className="Modal_form_wrapper"
+          isOpen={this.state.showEditForm}
+          onRequestClose={this.handleCloseModal}
+          contentLabel="Edit line item"
+          closeTimeoutMS={200}
         >
-          <button onClick={this.handleCloseModal}>Close Modal</button>
+          <ModalForm
+            line_item={this.state.line_item}
+            onSubmit={this.state.onSubmitModal}
+            onSubmitText="Save"
+          />
         </ReactModal>
 
 
-      </div>
+      </React.Fragment>
     )
   }
 }

@@ -155,6 +155,7 @@ module.exports = {
               presets: ['react', 'env', 'stage-0'],
               plugins: [
                 'react-hot-loader/babel',
+                'transform-class-properties',
                 'transform-decorators-legacy',
                 'transform-runtime'
               ]

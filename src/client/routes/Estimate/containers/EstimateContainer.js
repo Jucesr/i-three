@@ -6,6 +6,7 @@ import {
   updateQuantityOfItem,
   saveExpanded,
   addLineItem,
+  saveLineItem,
   deleteLineItem
 } from '../modules/estimate'
 
@@ -18,6 +19,7 @@ const mapDispatchToProps = {
   updateQuantityOfItem,
   saveExpanded,
   addLineItem,
+  saveLineItem,
   deleteLineItem
 }
 
