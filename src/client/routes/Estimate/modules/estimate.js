@@ -14,26 +14,20 @@ export const DELETE_LINE_ITEM = 'DELETE_LINE_ITEM'
 // ------------------------------------
 // Actions
 // ------------------------------------
-export const loadDbItems = (dbItems) => {
-  return {
+export const loadDbItems = (dbItems) => ({
     type    : LOAD_DB_ITEMS,
     payload : dbItems
-  }
-}
+})
 
-export const onDbItemSelected = (dbItem) => {
-  return {
+export const onDbItemSelected = (dbItem) => ({
     type    : ON_DB_ITEM_SELECTED,
     payload : dbItem
-  }
-}
+})
 
-export const updateQuantityOfItem = (item) => {
-  return {
+export const updateQuantityOfItem = (item) => ({
     type    : UPDATE_QUANTITY_OF_ITEM_SELECTED,
     payload : item
-  }
-}
+})
 
 export const saveExpanded = (expanded) => ({
     type    : SAVE_EXPANDED,
@@ -83,9 +77,10 @@ const ACTION_HANDLERS = {
   },
 
   [ON_DB_ITEM_SELECTED] : (state, action) => {
-    return Object.assign({}, state, {
-      selectedDbItem: action.payload
-    })
+    return{
+      ...state,
+      selectedDbItems: action.payload
+    }
   },
 
   [UPDATE_QUANTITY_OF_ITEM_SELECTED] : (state, action) => {

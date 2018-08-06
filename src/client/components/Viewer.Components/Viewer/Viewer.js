@@ -81,6 +81,10 @@ class Viewer extends React.Component {
     }
   }
 
+  getViewer(){
+    return this.viewer
+  }
+
   ///////////////////////////////////////////////////////////////////
   // Component will unmount so we can destroy the viewer to avoid
   // memory leaks

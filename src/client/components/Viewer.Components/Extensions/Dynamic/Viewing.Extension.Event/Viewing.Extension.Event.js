@@ -31,31 +31,27 @@ export default class EventExtension extends Autodesk.Viewing.Extension {
 
   onSelectionEvent(event) {
     var currSelection = this.viewer.getSelection()
-    // var domElem = document.getElementById('MySelectionValue')
-    // domElem.innerText = currSelection.length
 
-    // var AllDbIds = this.getAllDbIds(this.viewer);
-    // this.viewer.model.getBulkProperties(AllDbIds, [
-    //     'Keynote'
-    //   ],
-    //     function(elements){
-    //     console.log(elements);//this includes all properties of a node.
-    //   })
-    // var items = [];
-    this.viewer.model.getBulkProperties(currSelection, null, (elements) => {
-      var items = elements.map( i => ({
-        id: i.dbId,
-        name: i.name,
-        properties: {
-          ...i.properties.reduce((obj, p) => {
-            obj[p.displayName] = p.displayValue
-            return obj
-          }, {})
-        }
+    if(currSelection.length > 0){
 
-      }))
-      this.options.onDbItemSelected(items[0])
-    })
+      this.viewer.model.getBulkProperties(currSelection, null, (elements) => {
+        var items = elements.map( i => ({
+          id: i.dbId,
+          name: i.name,
+          properties: {
+            ...i.properties.reduce((obj, p) => {
+              obj[p.displayName] = p.displayValue
+              return obj
+            }, {})
+          }
+
+        }))
+        this.options.onDbItemSelected(items)
+      })
+    }else{
+      this.options.onDbItemSelected([])
+    }
+
   }
 
   getAllDbIds(viewer) {

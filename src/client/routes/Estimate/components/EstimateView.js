@@ -16,7 +16,8 @@ class EstimateView extends React.Component {
       super (props)
 
       this.state = {
-        show_model: false
+        show_model: false,
+        viewer: null
       }
    }
 
@@ -156,6 +157,10 @@ class EstimateView extends React.Component {
 
         viewer.loadModel(path)
 
+        this.setState((prevState) => ({
+          viewer
+        }))
+
 
       } catch (ex) {
 
@@ -168,6 +173,17 @@ class EstimateView extends React.Component {
    //
    //
    /////////////////////////////////////////////////////////
+
+   quantityTakeOffItem = () => {
+     //
+     let viewer = this.state.viewer
+     let items = _.cloneDeep(this.props.selectedDbItems)
+     let dbids = items.map(item => item.id)
+     viewer.isolateById(dbids)
+     viewer.clearSelection()
+     this.props.onDbItemSelected(items)
+
+   }
 
    render () {
 
@@ -186,7 +202,7 @@ class EstimateView extends React.Component {
               {this.state.show_model ? 'Hide': 'Show'}
             </button>
           </div>
-          <div className="estimate_subpage_table">
+          <div id="estimate_subpage_table" className="estimate_subpage_table">
             <EstimateTable
               estimate_data={this.props.estimate_data}
               expanded={this.props.expanded}
@@ -195,8 +211,9 @@ class EstimateView extends React.Component {
               saveLineItem={this.props.saveLineItem}
               selectedDbItem={this.props.selectedDbItem}
               saveExpanded={this.props.saveExpanded}
-              updateQuantityOfItem={this.props.updateQuantityOfItem}
+              quantityTakeOffItem={this.quantityTakeOffItem}
             />
+            {/* AGREGAR SUBVENTANA PARA CUANTIFICAR */}
           </div>
           {this.state.show_model && <div className="estimate_subpage_viewer">
             <Viewer onViewerCreated={(viewer => {

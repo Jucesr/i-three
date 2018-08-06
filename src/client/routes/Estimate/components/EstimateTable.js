@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactTable from "react-table"
 import ReactModal from 'react-modal';
-
+// ReactModal.setAppElement('#estimate_subpage_table');
 import ModalForm from './ModalForm'
 import QuantityInput from './QuantityInput'
 import RowActionsModal from './RowActionsModal'
@@ -65,9 +65,9 @@ class EstimateTable extends React.Component {
         }))
       }),
       quantity_takeoff: row => this.generateAction('Quantity take off', () => {
-        let rn = row.reference_number;
-        let quantity = this.props.selectedDbItem.properties.Volume
-        this.props.updateQuantityOfItem({rn,quantity})
+        // let rn = row.reference_number;
+        // let quantity = this.props.selectedDbItem.properties.Volume
+        this.props.quantityTakeOffItem()
       })
     }
 
@@ -75,6 +75,10 @@ class EstimateTable extends React.Component {
 
     this.handleCloseModal = this.handleCloseModal.bind(this)
 
+  }
+
+  getParent = () => {
+    return document.querySelector('#estimate_subpage_table');
   }
 
   generateAction(title, action){
@@ -338,6 +342,7 @@ class EstimateTable extends React.Component {
           isOpen={this.state.showEditForm}
           onRequestClose={this.handleCloseModal}
           contentLabel="Edit line item"
+          parentSelector={this.getParent}
           closeTimeoutMS={200}
         >
           <ModalForm
