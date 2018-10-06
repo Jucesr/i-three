@@ -139,7 +139,7 @@ const ACTION_HANDLERS = {
 var new_items = []
 for (var i = 0; i < 1; i++) {
   new_items.push({
-      _id: `00${i+6}`,
+      _id: `00${i+7}`,
       reference_number: `01.0${i+2}`,
       level_1: '01',
       level_1_description: 'Requerimientos generales',
@@ -150,7 +150,7 @@ for (var i = 0; i < 1; i++) {
   })
 
   new_items.push({
-    _id: `0${i+6}0`,
+    _id: `0${i+7}0`,
     reference_number: `03.02.0${i+3}`,
     level_1: '03',
     level_1_description: 'Concretos',
@@ -163,7 +163,7 @@ for (var i = 0; i < 1; i++) {
   })
 
   new_items.push({
-    _id: `${i+6}00`,
+    _id: `${i+7}00`,
     reference_number: `03.03.0${i+2}`,
     level_1: '03',
     level_1_description: 'Concretos',
@@ -228,6 +228,17 @@ const initialState = {
       level_2: '03',
       level_2_description: 'Firmes',
       description: 'Plantilla de concreto',
+      unit_price: 129.16,
+      quantity: 200.4,
+      total: 25888.49
+    },{
+      _id: '006',
+      reference_number: '04.01.01',
+      level_1: '04',
+      level_1_description: 'Albañileria',
+      level_2: '01',
+      level_2_description: 'Muros',
+      description: 'Muro de 8"',
       unit_price: 129.16,
       quantity: 200.4,
       total: 25888.49
