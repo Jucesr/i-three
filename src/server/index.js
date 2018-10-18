@@ -7,6 +7,7 @@ import compression from 'compression'
 import session from 'express-session'
 import bodyParser from 'body-parser'
 import express from 'express'
+import history from 'connect-history-api-fallback' 
 import helmet from 'helmet'
 import debug from 'debug'
 import util from 'util'
@@ -132,7 +133,16 @@ app.get('/lmv-proxy-3legged/*', proxy3legged)
 // rendering, you'll want to remove this middleware
 //
 /////////////////////////////////////////////////////////////////////
-app.use(require('connect-history-api-fallback')())
+app.use(history({
+  rewrites: [
+    { 
+      from: /\/api/, 
+      to: function(context) {
+        return context.parsedUrl.pathname;
+      }
+    }
+  ]
+}))
 
 /////////////////////////////////////////////////////////////////////
 // Static routes

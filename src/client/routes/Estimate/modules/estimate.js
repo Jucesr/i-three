@@ -133,9 +133,6 @@ const ACTION_HANDLERS = {
   }
 }
 
-// ------------------------------------
-// Reducer
-// ------------------------------------
 var new_items = []
 for (var i = 0; i < 1; i++) {
   new_items.push({
@@ -245,7 +242,9 @@ const initialState = {
     }, ...new_items
   ]
 }
-
+// ------------------------------------
+// Reducer
+// ------------------------------------
 export default function reducer (state = initialState, action) {
 
   const handler = ACTION_HANDLERS[action.type]
