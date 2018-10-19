@@ -1,0 +1,31 @@
+.ToolBar{
+  margin: 10px auto;
+  transition: width 300ms linear;
+  overflow: hidden;
+}
+
+.ToolBar_open{
+  width: 150px;
+}
+
+.ToolBar_close{
+  width: 0px;
+}
+
+.ToolBar-container{
+  display: flex;
+  flex-direction: column;
+}
+
+.ToolBar-item{
+
+  &:hover{
+    background-color: darken(white, 10%);
+    cursor: pointer;
+  }
+
+  div{
+    margin: 10px;
+    
+  }
+}

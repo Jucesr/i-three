@@ -1,5 +1,10 @@
 .estimate_page{
   display: flex;
+  flex-direction: column;
+}
+
+.estimate_page_container{
+  display: flex;
 }
 
 .estimate_subpage_table{
@@ -19,11 +24,6 @@
 .estimate_subpage_toolbar{
   background-color: #3f6183
 }
-
-.toolbar_toggle{
-
-}
-
 
 .estimate-table{
   background-color: white;

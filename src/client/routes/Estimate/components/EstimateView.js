@@ -3,6 +3,8 @@ import React from 'react'
 
 import Viewer from 'Viewer'
 import EstimateTable from './EstimateTable'
+import SubHeader from "./SubHeader"
+import ToolBar from "./ToolBar"
 
 import './EstimateView.scss'
 
@@ -16,6 +18,7 @@ class EstimateView extends React.Component {
       super (props)
 
       this.state = {
+        toolBarOpen: true,
         show_model: false,
         viewer: null
       }
@@ -190,38 +193,50 @@ class EstimateView extends React.Component {
 
       return (
         <div className="estimate_page">
-          <div className="estimate_subpage_toolbar">
-            <button
-              className="toolbar_toggle"
-              onClick={e => {
-                this.setState((prevState) => ({
-                  show_model: !prevState.show_model
-                }))
-              }}
-            >
-              {this.state.show_model ? 'Hide': 'Show'}
-            </button>
-          </div>
-          <div id="estimate_subpage_table" className="estimate_subpage_table">
-            <EstimateTable
-              estimate_data={this.props.estimate_data}
-              expanded={this.props.expanded}
-              deleteLineItem={this.props.deleteLineItem}
-              addLineItem={this.props.addLineItem}
-              saveLineItem={this.props.saveLineItem}
-              selectedDbItem={this.props.selectedDbItem}
-              saveExpanded={this.props.saveExpanded}
-              quantityTakeOffItem={this.quantityTakeOffItem}
+          <SubHeader 
+            onClickMenuHandler = {e => {
+              this.setState((prevState) => ({
+                toolBarOpen: !prevState.toolBarOpen
+              }))
+            }}
+          />
+          <div className="estimate_page_container">
+            <ToolBar 
+              isOpen={this.state.toolBarOpen}
             />
-            {/* AGREGAR SUBVENTANA PARA CUANTIFICAR */}
-          </div>
-          {this.state.show_model && <div className="estimate_subpage_viewer">
-            <Viewer onViewerCreated={(viewer => {
-                this.onViewerCreated(viewer)
-              })}
-            />
-          </div>}
 
+            {/* <div className="estimate_subpage_toolbar">
+              <button
+                className="toolbar_toggle"
+                onClick={e => {
+                  this.setState((prevState) => ({
+                    show_model: !prevState.show_model
+                  }))
+                }}
+              >
+                {this.state.show_model ? 'Hide': 'Show'}
+              </button>
+            </div> */}
+            <div id="estimate_subpage_table" className="estimate_subpage_table">
+              <EstimateTable
+                estimate_data={this.props.estimate_data}
+                expanded={this.props.expanded}
+                deleteLineItem={this.props.deleteLineItem}
+                addLineItem={this.props.addLineItem}
+                saveLineItem={this.props.saveLineItem}
+                selectedDbItem={this.props.selectedDbItem}
+                saveExpanded={this.props.saveExpanded}
+                quantityTakeOffItem={this.quantityTakeOffItem}
+              />
+              {/* AGREGAR SUBVENTANA PARA CUANTIFICAR */}
+            </div>
+            {this.state.show_model && <div className="estimate_subpage_viewer">
+              <Viewer onViewerCreated={(viewer => {
+                  this.onViewerCreated(viewer)
+                })}
+              />
+            </div>}
+          </div>
         </div>
       )
    }

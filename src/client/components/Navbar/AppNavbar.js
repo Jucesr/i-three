@@ -10,7 +10,6 @@ import {
   DropdownButton,
   NavDropdown,
   MenuItem,
-  NavItem,
   Navbar,
   Button,
   Modal,
@@ -80,97 +79,141 @@ export default class AppNavbar extends React.Component {
       : ''
 
     return (
+      <nav className="navbar">
+        <div className="nav-left">
+          <NavItem icon="home.png" pathname="/" />
+          <NavItem name="Projects" />
+          <NavItem 
+            name="Estimate" 
+            pathname='/estimate' 
+            query={{
+              path: 'resources/models/arca/3D View/arca/arca.svf',
+              extIds: 'Viewing.Extension.Event'
+            }} />
+          
+          <div className="nav-item-wrapper">
+            <div className="nav-item">
+              <input placeholder="Search..." type="text"/>
+            </div> 
+          </div>
+        </div>
+        
+        <div className="nav-right">
+          <NavItem name="Log in" /> 
+        </div>
+      </nav>
+      // <Navbar className="custom-navbar">
+      //   {/* <Navbar.Header>
+      //     <Navbar.Brand>
+      //       <NavItem className="forge-brand-item"
+      //         href="http://hermosillo.com/"
+      //         target="_blank">
+      //         <img height="20" src="/resources/img/hermosillo.jpg"/>
+      //       </NavItem>
+      //     </Navbar.Brand>
+      //     <Navbar.Toggle/>
+      //   </Navbar.Header> */}
 
-      <Navbar className="forge-navbar">
-        <Navbar.Header>
-          <Navbar.Brand>
-            <NavItem className="forge-brand-item"
-              href="http://hermosillo.com/"
-              target="_blank">
-              <img height="30" src="/resources/img/hermosillo.jpg"/>
-            </NavItem>
-          </Navbar.Brand>
-          <Navbar.Toggle/>
-        </Navbar.Header>
+      //   <Navbar.Collapse>
 
-        <Navbar.Collapse>
+      //     {
+      //       appState.navbar.links.home &&
 
-          {
-            appState.navbar.links.home &&
+      //       <Nav>
+      //         <LinkContainer to={{ pathname: '/', query: { } }}>
+      //           <NavItem eventKey="home">
+      //             <label className="nav-label">
+      //               &nbsp; Home
+      //             </label>
+      //           </NavItem>
+      //         </LinkContainer>
+      //       </Nav>
+      //     }
 
-            <Nav>
-              <LinkContainer to={{ pathname: '/', query: { } }}>
-                <NavItem eventKey="home">
-                  <label className="nav-label">
-                    &nbsp; Home
-                  </label>
-                </NavItem>
-              </LinkContainer>
-            </Nav>
-          }
+      //     {
+      //       appState.navbar.links.estimate &&
 
-          {
-            appState.navbar.links.estimate &&
+      //       <Nav>
+      //         <LinkContainer to={{
+      //           pathname: '/estimate',
+      //           query: {
+      //             path: 'resources/models/arca/3D View/arca/arca.svf',
+      //             extIds: 'Viewing.Extension.Event'
+      //           }
+      //         }}>
+      //           <NavItem eventKey="estimate">
+      //             <label className="nav-label">
+      //               &nbsp; Estimate
+      //             </label>
+      //           </NavItem>
+      //         </LinkContainer>
+      //       </Nav>
+      //     }
 
-            <Nav>
-              <LinkContainer to={{
-                pathname: '/estimate',
-                query: {
-                  path: 'resources/models/arca/3D View/arca/arca.svf',
-                  extIds: 'Viewing.Extension.Event'
-                }
-              }}>
-                <NavItem eventKey="estimate">
-                  <label className="nav-label">
-                    &nbsp; Estimate
-                  </label>
-                </NavItem>
-              </LinkContainer>
-            </Nav>
-          }
+      //     <Nav pullRight>
 
-          <Nav pullRight>
+      //       {
 
-            {
+      //       appState.navbar.links.login &&
 
-            appState.navbar.links.login &&
+      //       <NavItem eventKey="login" onClick={() => {this.login()}}>
+              
+      //         {
+      //           appState.user &&
+      //           <img className="avatar" src={appState.user.profileImages.sizeX80}/>
+      //         }
+      //         <label className="nav-label">
+      //           &nbsp; { appState.user ? username : "Login"}
+      //         </label>
+      //       </NavItem>
+      //         }
 
-            <NavItem eventKey="login" onClick={() => {this.login()}}>
-              {
-                !appState.user &&
-                <span className="a360-logo"/>
-              }
-              {
-                appState.user &&
-                <img className="avatar" src={appState.user.profileImages.sizeX80}/>
-              }
-              <label className="nav-label">
-                &nbsp; { appState.user ? username : "Login"}
-              </label>
-            </NavItem>
-              }
+      //       {
+      //         appState.navbar.links.about &&
 
-            {
-              appState.navbar.links.about &&
+      //         <NavItem eventKey="about" onClick={() => {this.openAboutDlg()}}>
+      //           <label className="nav-label">
+      //             &nbsp; About
+      //           </label>
+      //         </NavItem>
+      //       }
+      //     </Nav>
 
-              <NavItem eventKey="about" onClick={() => {this.openAboutDlg()}}>
-                <label className="nav-label">
-                  &nbsp; About ...
-                </label>
-              </NavItem>
-            }
-          </Nav>
+      //   </Navbar.Collapse>
 
-        </Navbar.Collapse>
+      //   <AboutDlg
+      //     close={()=>{ this.setState(Object.assign({}, this.state, {
+      //       aboutOpen: false
+      //     }))}}
+      //     open={this.state.aboutOpen}
+      //   />
 
-        <AboutDlg
-          close={()=>{ this.setState(Object.assign({}, this.state, {
-            aboutOpen: false
-          }))}}
-          open={this.state.aboutOpen}
-        />
-
-      </Navbar>
+      // </Navbar>
     )
   }
+}
+
+const NavItem = (props) => {
+  
+  const {pathname, query, name, icon} = props;
+  
+  return (
+    
+    <div className="nav-item-wrapper">
+      <LinkContainer to={
+        { 
+          pathname: `${pathname|| '/'}`, 
+          query: query 
+        }
+      }>
+      <div className="nav-item">
+        {!!icon && <img width="20px" src={`/resources/img/${icon}`}/>}
+
+        {!!name && name}
+        </div>
+        
+      </LinkContainer>
+      
+    </div>
+  )
 }
