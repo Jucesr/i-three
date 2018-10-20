@@ -1,0 +1,16 @@
+.ProjectPage{
+  display: flex;
+  // flex-direction: column;
+  height: 100vh;
+  background-color: darken(white, 2%);
+  // margin: 0 10px;
+}
+
+.ProjectPage_container{
+  display: flex;
+}
+
+.ProjectPage_page{
+  display: flex;
+  width: 100%;
+}

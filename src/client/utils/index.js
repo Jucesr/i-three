@@ -16,7 +16,17 @@ export const capitalizeFirstLetter = (string) => {
 }
 
 export const formatReference = (reference_number) => {
-  	let aux = reference_number.toString()
-    aux = aux.padStart(aux.length % 2 == 0 ? aux.length : aux.length + 1,'0')
-    return aux.replace(/\B(?=(\d{2})+(?!\d))/g, ".");
+  let aux = reference_number.toString()
+  aux = aux.padStart(aux.length % 2 == 0 ? aux.length : aux.length + 1,'0')
+  return aux.replace(/\B(?=(\d{2})+(?!\d))/g, ".");
+}
+
+export const encodeQuery = (query) => {
+  return Object.keys(query).reduce((current, key, index) => {
+    if(index == 0){
+      return current + `?${key}=${encodeURIComponent(query[key])}`
+    }else{
+      return current + `&${key}=${encodeURIComponent(query[key])}`
+    }
+  }, '')
 }

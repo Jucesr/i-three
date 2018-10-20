@@ -25,6 +25,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state) => ({
   ...state.estimate,
+  project: state.project,
   appState: state.app
 })
 

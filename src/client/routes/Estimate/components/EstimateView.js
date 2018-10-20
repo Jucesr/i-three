@@ -189,11 +189,13 @@ class EstimateView extends React.Component {
    }
 
    render () {
-
+      const project = !!this.props.project ? this.props.project : {};
+      const projectName = !!project.active ? project.items[project.active].name : 'Undefined'
 
       return (
         <div className="estimate_page">
-          <SubHeader 
+          <SubHeader
+            projectName={projectName} 
             onClickMenuHandler = {e => {
               this.setState((prevState) => ({
                 toolBarOpen: !prevState.toolBarOpen

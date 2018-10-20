@@ -11,7 +11,6 @@ export default (props) => {
   return (
     <div className={toolBarClass}>
         <div className="ToolBar-container">
-          <ToolBarItem name="Overview" />
           <ToolBarItem name="Estimates" />
           <ToolBarItem name="Line Items" />
           <ToolBarItem name="Materials" />

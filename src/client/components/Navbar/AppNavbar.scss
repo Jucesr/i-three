@@ -44,6 +44,15 @@
   }
 }
 
+.nav-item-button{
+  &:hover{
+    background: darken(rgb(233, 232, 232), 15);
+    cursor: pointer;
+  }
+}
+
+
+
 //  ---------------------------
 
 .navbar-brand,

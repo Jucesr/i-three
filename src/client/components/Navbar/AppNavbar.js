@@ -1,10 +1,11 @@
 
-import { LinkContainer } from 'react-router-bootstrap'
 import React from 'react'
 import PropTypes from 'prop-types'
 import AboutDlg from 'Dialogs/AboutDlg'
 import ServiceManager from 'SvcManager'
 import './AppNavbar.scss'
+
+import { encodeQuery } from "../../utils";
 
 import {
   DropdownButton,
@@ -81,15 +82,29 @@ export default class AppNavbar extends React.Component {
     return (
       <nav className="navbar">
         <div className="nav-left">
-          <NavItem icon="home.png" pathname="/" />
-          <NavItem name="Projects" />
+
+          <NavItem 
+            icon="home.png" 
+            pathname="/" 
+            router={this.props.router} />
+
+          <NavItem 
+            name="Projects" 
+            pathname="/project"
+            router={this.props.router} />
+
           <NavItem 
             name="Estimate" 
             pathname='/estimate' 
             query={{
               path: 'resources/models/arca/3D View/arca/arca.svf',
               extIds: 'Viewing.Extension.Event'
-            }} />
+            }}
+            router={this.props.router}
+             />
+          {/* ?path=resources%2Fmodels%2Farca%2F3D+View%2Farca%2Farca.svf&extIds=Viewing.Extension.Event */}
+          {/* ?path=resources%2Fmodels%2Farca%2F3D%20View%2Farca%2Farca.svf&extIds=Viewing.Extension.Event */}
+          
           
           <div className="nav-item-wrapper">
             <div className="nav-item">
@@ -195,25 +210,31 @@ export default class AppNavbar extends React.Component {
 
 const NavItem = (props) => {
   
-  const {pathname, query, name, icon} = props;
+  const {pathname, name, icon, router, modifier} = props;
+
+  let {query} = props;
   
+  const onClick = (e) => {
+
+    if(query){
+      query = encodeQuery(query)
+      console.log(query);
+    }
+
+    router.push(`${pathname}${query ? `${query}` : ''}`)
+  }
+
   return (
     
-    <div className="nav-item-wrapper">
-      <LinkContainer to={
-        { 
-          pathname: `${pathname|| '/'}`, 
-          query: query 
-        }
-      }>
-      <div className="nav-item">
+    <div 
+      onClick={onClick} 
+      className="nav-item-wrapper nav-item-button">
+      
+      <div className={`nav-item`}>
         {!!icon && <img width="20px" src={`/resources/img/${icon}`}/>}
 
         {!!name && name}
-        </div>
-        
-      </LinkContainer>
-      
+        </div> 
     </div>
   )
 }
